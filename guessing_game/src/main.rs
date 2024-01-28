@@ -9,8 +9,24 @@ fn main() {
         let mut input = String::new();
         match io::stdin().read_line(&mut input) {
             Ok(_) => {
-                println!("You Entered: {}", input.trim());
-                break;
+                let input: u32 = match input.trim().parse() {
+                    Ok(num) => num,
+                    Err(_) => {
+                        println!("please enter a number");
+                        continue;
+                    },
+                };
+                
+                println!("Your guess : {input}");
+        
+                match target.cmp(&input) {
+                    Ordering::Less => println!("Down"),
+                    Ordering::Greater => println!("Up"),
+                    Ordering::Equal => {
+                        println!("You got it!");
+                        break;
+                    }
+                }
             }
             Err(_) => {
                 println!("Input failed, try again");
@@ -18,20 +34,6 @@ fn main() {
             }
         };
 
-        let input: u32 = match input.trim().parse() {
-            Ok(num) => num,
-            Err(_) => continue,
-        };
         
-        println!("Your guess : {input}");
-
-        match target.cmp(&input) {
-            Ordering::Less => println!("Up!"),
-            Ordering::Greater => println!("Down"),
-            Ordering::Equal => {
-                println!("You got it!");
-                break;
-            }
-        }
     }
 }
